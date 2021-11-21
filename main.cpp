@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <iterator>
+#include <memory>
 
 int main()
 {
@@ -11,24 +12,24 @@ int main()
     int countRepit{};
 
     auto l{ [&countRepit](std::vector<int>& v)
-    {
-        std::unordered_set<int> us;
+            {
+                std::unordered_set<int> us;
 
-        for (const auto& elem : v)
-        {
-            if (!us.insert(elem).second) ++countRepit;
-        }
-        
-        auto u_ptr = std::make_unique<std::vector<int>>(us.size());
+                for (const auto& elem : v)
+                {
+                    if (!us.insert(elem).second) ++countRepit;
+                }
 
-        std::copy(us.cbegin(), us.cend(), u_ptr.get()->begin());
+                auto u_ptr = std::make_unique<std::vector<int>>(us.size());
 
-        return u_ptr;
-    } };
+                std::copy(us.cbegin(), us.cend(), u_ptr.get()->begin());
+
+                return u_ptr;
+            } };
 
     std::cout << "v: ";
     std::copy(v.cbegin(), v.cend(), std::ostream_iterator<int>(std::cout, " "));
-    
+
     auto u_ptr = l(v);
 
     std::cout << "\nNumber of repetitions: " << countRepit;
